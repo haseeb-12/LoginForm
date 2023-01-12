@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import { Routes, Route, Navigate } from 'react-router-dom'
+import HomePage from './Pages/HomePage/HomePage'
+import Login from './Pages/Login/Login'
+import Profile from './Pages/Profile/Profile'
 import './App.css';
+import Navbar from './Component/Navbar/Navbar';
+import { AuthContext } from './store/AuthContextProvider';
+import { useContext } from 'react';
 
 function App() {
+  const { isLoggedIn } = useContext(AuthContext)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+
+        {!isLoggedIn && <Route path='login' element={<Login />} />}
+
+        {isLoggedIn &&
+          <Route path='profile' element={<Profile />} />
+        }
+        <Route path='*' element={<Navigate to='login' replace />} />
+      </Routes>
     </div>
   );
 }
